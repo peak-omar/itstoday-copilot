@@ -28,11 +28,16 @@ export interface Angle {
 
 export type ComplianceRisk = "low" | "medium" | "high";
 
+/** How badly a flag can hurt: a bounced ad vs. a dead account. */
+export type ComplianceSeverity = "rejection" | "account-ban" | "permanent-ban";
+
 export interface ComplianceFlag {
   phrase: string;
   reason: string;
   /** Which platform policy this touches, e.g. "Meta: Personal health claims". */
   policy: string;
+  /** Consequence if it ships: ad rejected, account banned, or permanent ban. */
+  severity: ComplianceSeverity;
   /** A compliant rewrite that keeps the persuasive intent. */
   rewrite: string;
   /** Set once the user applies the rewrite into the copy. */
@@ -59,9 +64,25 @@ export interface Creative {
   compliance: Compliance;
 }
 
+/** Reverse-engineering of a competitor's live ad from a screenshot. */
+export interface Teardown {
+  platform: string;
+  angle: string;
+  hook: string;
+  targetEmotion: string;
+  funnelStage: string;
+  offer: string;
+  /** Concrete reasons the ad works — the transferable lessons. */
+  whyItWorks: string[];
+  /** Weaknesses / gaps a competitor could exploit to beat it. */
+  weaknesses: string[];
+}
+
 export interface AnalyzeResult {
   brief: OfferBrief;
   angles: Angle[];
+  /** Present when the campaign was reverse-engineered from a competitor ad. */
+  teardown?: Teardown;
   demo: boolean;
 }
 

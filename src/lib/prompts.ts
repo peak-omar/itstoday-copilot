@@ -110,10 +110,15 @@ export function buildCreative(brief: OfferBrief, angle: Angle, platform: Platfor
               properties: {
                 phrase: { type: "string", description: "The exact risky phrase from the copy." },
                 reason: { type: "string", description: "Why it risks rejection/ban." },
-                policy: { type: "string", description: "Platform + policy theme it touches." },
+                policy: { type: "string", description: "Specific platform policy it touches, cited by name." },
+                severity: {
+                  type: "string",
+                  enum: ["rejection", "account-ban", "permanent-ban"],
+                  description: "Consequence if shipped: ad rejected, account banned, or permanent ban.",
+                },
                 rewrite: { type: "string", description: "Compliant rewrite that keeps the persuasive intent." },
               },
-              required: ["phrase", "reason", "policy", "rewrite"],
+              required: ["phrase", "reason", "policy", "severity", "rewrite"],
             },
           },
         },
@@ -141,7 +146,75 @@ ${fieldList}
 Then AUDIT your own copy against ${spec.name}'s policy. High-risk themes on this platform:
 ${spec.policyThemes.map((t) => `  • ${t}`).join("\n")}
 
-For every risky phrase, add a flag with a compliant rewrite that preserves persuasion. Score 0-100 (higher = safer). If the copy is clean, return an empty flags array and a high score. Write copy that is compliant by design — persuasive without tripping policy.`;
+For every risky phrase, add a flag with the specific policy cited, a severity (rejection / account-ban / permanent-ban), and a compliant rewrite that preserves persuasion. Score 0-100 (higher = safer). If the copy is clean, return an empty flags array and a high score. Write copy that is compliant by design — persuasive without tripping policy.`;
 
   return { system: MARKETER_SYSTEM, prompt, schema, toolName: "submit_creative" as const };
+}
+
+/* -------------------------------------------------------------------------- */
+/* Competitor teardown: reverse-engineer a live ad → beat-it brief + angles    */
+/* -------------------------------------------------------------------------- */
+
+export function buildTeardown(note?: string) {
+  const schema = {
+    type: "object",
+    properties: {
+      teardown: {
+        type: "object",
+        description: "Reverse-engineering of the competitor ad in the image.",
+        properties: {
+          platform: { type: "string", description: "The platform this ad most likely runs on." },
+          angle: { type: "string", description: "The core marketing angle it leads with." },
+          hook: { type: "string", description: "The specific hook / opening that stops the scroll." },
+          targetEmotion: { type: "string", description: "The primary emotion it targets." },
+          funnelStage: { type: "string", description: "Awareness stage it targets (unaware, problem-aware, solution-aware...)." },
+          offer: { type: "string", description: "The product/offer and its promise as pitched." },
+          whyItWorks: { type: "array", items: { type: "string" }, description: "3-4 concrete, transferable reasons this ad converts." },
+          weaknesses: { type: "array", items: { type: "string" }, description: "2-3 gaps or weaknesses a competitor could exploit to beat it." },
+        },
+        required: ["platform", "angle", "hook", "targetEmotion", "funnelStage", "offer", "whyItWorks", "weaknesses"],
+      },
+      brief: {
+        type: "object",
+        description: "A campaign brief for a competing product, so we can generate a better ad.",
+        properties: {
+          product: { type: "string" },
+          category: { type: "string" },
+          valueProposition: { type: "string" },
+          keyBenefits: { type: "array", items: { type: "string" } },
+          targetAudience: { type: "string" },
+          sensitiveClaims: { type: "array", items: { type: "string" } },
+          toneNotes: { type: "string" },
+        },
+        required: ["product", "category", "valueProposition", "keyBenefits", "targetAudience", "sensitiveClaims", "toneNotes"],
+      },
+      angles: {
+        type: "array",
+        description: "4 'beat-it' angles engineered to outperform the competitor — some derived from what works, some exploiting its weaknesses.",
+        items: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            psychology: { type: "string" },
+            description: { type: "string" },
+            bestPlatforms: {
+              type: "array",
+              items: { type: "string", enum: ["meta", "tiktok", "taboola", "google"] },
+            },
+          },
+          required: ["name", "psychology", "description", "bestPlatforms"],
+        },
+      },
+    },
+    required: ["teardown", "brief", "angles"],
+  };
+
+  const prompt = `The attached image is a competitor's advertisement. You are spying on it to beat it.
+
+${note ? `Buyer's note: ${note}\n` : ""}
+1) Tear it down: reverse-engineer the angle, hook, target emotion, funnel stage, offer, WHY it works, and its weaknesses. Read the actual creative — headline, imagery, on-image text, tone.
+2) Build a campaign brief for a competing product in the same category (infer a plausible product if we don't have one).
+3) Propose 4 "beat-it" angles engineered to outperform this ad — lean into what makes it work, and attack its weaknesses. Make them genuinely distinct.`;
+
+  return { system: MARKETER_SYSTEM, prompt, schema, toolName: "submit_teardown" as const };
 }

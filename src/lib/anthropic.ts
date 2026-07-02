@@ -29,7 +29,19 @@ export async function generateStructured<T>(opts: {
   schema: Record<string, unknown>;
   toolName: string;
   maxTokens?: number;
+  /** Optional images (e.g. a competitor ad screenshot) for multimodal analysis. */
+  images?: { data: string; mediaType: string }[];
 }): Promise<T> {
+  const content: Anthropic.ContentBlockParam[] = [
+    ...(opts.images ?? []).map(
+      (img): Anthropic.ContentBlockParam => ({
+        type: "image",
+        source: { type: "base64", media_type: img.mediaType as "image/png", data: img.data },
+      })
+    ),
+    { type: "text", text: opts.prompt },
+  ];
+
   const res = await getClient().messages.create({
     model: MODEL,
     max_tokens: opts.maxTokens ?? 4096,
@@ -42,7 +54,7 @@ export async function generateStructured<T>(opts: {
       },
     ],
     tool_choice: { type: "tool", name: opts.toolName },
-    messages: [{ role: "user", content: opts.prompt }],
+    messages: [{ role: "user", content }],
   });
 
   const block = res.content.find((b) => b.type === "tool_use");

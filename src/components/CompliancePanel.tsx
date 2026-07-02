@@ -1,5 +1,11 @@
-import type { Compliance } from "@/lib/types";
+import type { Compliance, ComplianceSeverity } from "@/lib/types";
 import { Icon } from "./Icon";
+
+const SEVERITY: Record<ComplianceSeverity, { label: string; cls: string }> = {
+  rejection: { label: "Ad rejected", cls: "bg-warning-soft text-warning" },
+  "account-ban": { label: "Account ban risk", cls: "bg-danger-soft text-danger" },
+  "permanent-ban": { label: "Permanent ban", cls: "bg-danger text-white" },
+};
 
 const RISK_STYLES: Record<Compliance["risk"], { label: string; box: string; text: string; bar: string }> = {
   low: { label: "Low risk", box: "border-[color:var(--success)]/20 bg-success-soft", text: "text-success", bar: "bg-success" },
@@ -49,6 +55,11 @@ export function CompliancePanel({
                 >
                   &ldquo;{f.phrase}&rdquo;
                 </span>
+                {!f.applied && (
+                  <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${SEVERITY[f.severity].cls}`}>
+                    {SEVERITY[f.severity].label}
+                  </span>
+                )}
                 <span className="text-[10px] uppercase tracking-wide text-muted">{f.policy}</span>
               </div>
               <p className="mt-1.5 text-muted">{f.reason}</p>

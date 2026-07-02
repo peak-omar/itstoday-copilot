@@ -1,4 +1,4 @@
-import type { AnalyzeResult, Creative, PlatformId } from "./types";
+import type { AnalyzeResult, Creative, PlatformId, Teardown } from "./types";
 
 /**
  * A fully-formed example campaign so the deployed URL is impressive even with
@@ -94,6 +94,7 @@ function demoCreative(platform: PlatformId): Creative {
               phrase: "keep it steady all afternoon",
               reason: "Borderline outcome guarantee; soften to avoid implying a promised result.",
               policy: "Meta: Unrealistic results / guarantees",
+              severity: "rejection",
               rewrite: "help support steady energy through the afternoon",
             },
           ],
@@ -123,6 +124,7 @@ function demoCreative(platform: PlatformId): Creative {
               phrase: "no more 3PM zombie mode",
               reason: "Personal results claim — fine as testimonial but keep it clearly anecdotal.",
               policy: "TikTok: Exaggerated/health results",
+              severity: "rejection",
               rewrite: "my afternoons have felt a lot easier (just my experience)",
             },
           ],
@@ -150,6 +152,7 @@ function demoCreative(platform: PlatformId): Creative {
               phrase: "Some Doctors Rarely Mention",
               reason: "Implied medical authority/conspiracy framing can be flagged as misleading.",
               policy: "Taboola: Misleading / deceptive claims",
+              severity: "account-ban",
               rewrite: "A Plant Nutrient Getting Attention for Healthy Blood Sugar",
             },
           ],
@@ -181,3 +184,67 @@ function demoCreative(platform: PlatformId): Creative {
 export function demoCreatives(platforms: PlatformId[]): Creative[] {
   return platforms.map(demoCreative);
 }
+
+/** Sample teardown so the competitor-ad flow works with no API key. */
+const DEMO_TEARDOWN: Teardown = {
+  platform: "Meta (Facebook/Instagram)",
+  angle: "Fear-based authority — 'the #1 ingredient your doctor won't tell you about'",
+  hook: "Bold before/after imagery + 'Doctors are stunned' overlay to stop the scroll",
+  targetEmotion: "Fear and distrust of the medical system, plus hope",
+  funnelStage: "Problem-aware — knows their blood sugar is a concern, not yet solution-aware",
+  offer: "SugarShield — a blood-sugar supplement promising to 'reverse' sugar problems in 30 days",
+  whyItWorks: [
+    "Authority + conspiracy framing ('doctors won't tell you') creates a curiosity gap",
+    "Concrete 30-day timeframe makes the promise feel tangible",
+    "Strong pattern-interrupt visual stops the scroll in a health-anxious audience",
+  ],
+  weaknesses: [
+    "'Reverse' and before/after are hard policy violations — this account is one report from a ban",
+    "Fear framing erodes trust; a reassurance angle can win the same audience more durably",
+    "No specific mechanism — a 'how it works' angle can out-credibility it",
+  ],
+};
+
+export const DEMO_TEARDOWN_RESULT: AnalyzeResult = {
+  demo: true,
+  teardown: DEMO_TEARDOWN,
+  brief: {
+    ...DEMO_ANALYZE.brief,
+    valueProposition:
+      "A plant-based daily capsule that supports healthy blood sugar — the credible, compliant answer to fear-based competitor ads.",
+  },
+  angles: [
+    {
+      id: "angle-mechanism",
+      name: "The Mechanism They Skip",
+      psychology: "Credibility + curiosity",
+      description:
+        "Beats the competitor's vague 'reverse' promise by explaining the actual plant mechanism — out-credibilities fear-bait.",
+      bestPlatforms: ["taboola", "meta"],
+    },
+    {
+      id: "angle-reassurance",
+      name: "Calm, Not Scared",
+      psychology: "Reassurance vs. fear",
+      description:
+        "Wins the same anxious audience with an empathetic, in-control tone instead of fear — more durable and far safer.",
+      bestPlatforms: ["meta", "google"],
+    },
+    {
+      id: "angle-doctor-built",
+      name: "Actually Doctor-Formulated",
+      psychology: "Authority (earned)",
+      description:
+        "Flips the 'doctors won't tell you' conspiracy into genuine, compliant authority — credibility that lasts.",
+      bestPlatforms: ["google", "meta"],
+    },
+    {
+      id: "angle-daily-habit",
+      name: "The 30-Second Morning Habit",
+      psychology: "Simplicity + tangible action",
+      description:
+        "Reframes from a medical promise to an easy daily habit — relatable, low-risk, and highly compliant.",
+      bestPlatforms: ["tiktok", "taboola"],
+    },
+  ],
+};

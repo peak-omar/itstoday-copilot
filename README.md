@@ -1,8 +1,8 @@
 # Angleworks
 
-*Where winning ads get built — compliant by default.*
+*Spy on winners. Launch better ads. Keep your accounts.*
 
-**Paste an affiliate offer → get launch-ready ads for Meta, TikTok, Taboola & Google in ~60 seconds — each one pre-checked against platform policy so your ad accounts stay alive.**
+**Upload a competitor's ad (or start from an offer) → Angleworks reverse-engineers what makes it work, then builds compliant, launch-ready ads for Meta, TikTok, Taboola & Google — each one pre-checked against platform policy so your accounts stay alive.**
 
 > Built for the It's Today Media $5,000 Build Challenge.
 > Live demo: _<add your Vercel URL here>_ · Works instantly in demo mode; add an API key for live generation on any real offer.
@@ -13,12 +13,14 @@
 
 A media buyer's day starts with a blank canvas and a deadline: take an offer, find an angle, write copy for four platforms that each have their own format and their own landmines, mock up a creative, and — the part everyone forgets until an account gets banned — make sure none of it trips ad policy.
 
-Creative Ops Copilot does that whole first pass in one click:
+Angleworks does that whole first pass in one click. It has two ways in:
 
-1. **Reads the offer.** Paste a landing-page URL (or a description) and it scrapes the page and extracts a tight campaign brief — product, value prop, audience, key benefits, and the **compliance-sensitive claims** a regulator or ad platform would scrutinize.
+0. **Tear down a competitor's ad *(the centerpiece)*.** Upload a screenshot of a competitor's live ad and Claude's vision reverse-engineers it — the **angle, hook, target emotion, funnel stage, offer, why it works, and its weaknesses** — then generates **"beat-it" angles** engineered to outperform it. This is the buyer's real daily job (mining winners), automated. It's grounded in a real ad, not invented from a blank page.
+
+1. **Or read an offer.** Paste a landing-page URL (or a description) and it scrapes the page and extracts a tight campaign brief — product, value prop, audience, key benefits, and the **compliance-sensitive claims** a regulator or ad platform would scrutinize.
 2. **Generates angles, not just copy.** It proposes four genuinely distinct marketing angles — each with its psychological driver (curiosity gap, problem-agitate, fear-of-loss, aspiration) and the platforms it tends to win on. Angles are the unit affiliates actually test; that's the real leverage.
 3. **Writes platform-native creatives.** Pick an angle and it produces launch-ready ads for **Meta, TikTok, Taboola, and Google** in parallel — each respecting that platform's real fields and character limits (Meta primary text + headline, a TikTok hook + UGC script, a Taboola curiosity headline, a Google RSA with 3 headlines + 2 descriptions), plus A/B variants, an art-direction brief, and a visual mockup of the ad in context.
-4. **Audits its own copy for compliance.** This is the part that protects the business. Every creative is scored (0–100) for policy risk on its platform, with the **exact risky phrase flagged, the policy it touches, and a compliant rewrite that keeps the persuasion.** One click **applies the fix** straight into the copy. There's also a campaign-wide compliance score. Health claims, income promises, before/after framing, misleading authority — the things that get affiliate accounts nuked.
+4. **Audits its own copy for compliance.** This is the part that protects the business. Every creative is scored (0–100) for policy risk on its platform, with the **exact risky phrase flagged, the specific policy cited, a severity (ad rejected → account ban → permanent ban), and a compliant rewrite that keeps the persuasion.** One click **applies the fix** straight into the copy. There's also a campaign-wide compliance score. Health claims, income promises, before/after framing, misleading authority — the things that get affiliate accounts nuked.
 5. **Lets you edit, regenerate, and export.** Every copy field is editable inline, any single creative can be regenerated, and one click per platform downloads a CSV close to what you'd paste into that platform's bulk uploader.
 
 It works like a real tool: **campaign history** is saved locally so you can revisit past offers, and it **degrades gracefully** — with no API key it serves a full sample campaign (a real nutra vertical) so the deployed URL is always clickable and complete.
@@ -26,6 +28,8 @@ It works like a real tool: **campaign history** is saved locally so you can revi
 ## Why I built THIS one
 
 Because it sits exactly where an affiliate business makes and loses money.
+
+No experienced media buyer invents angles from a blank page — they start from **what's already winning** and launch a better version before competitors do. So the tool starts there too: tear down a proven competitor ad, then build against it. That's the highest-leverage activity in affiliate, and it's what makes this more than an AI copywriter.
 
 The brief said you advertise at scale across Google, Meta, Taboola and TikTok, and that "this simple process requires immense technical input." The two biggest taxes on a media-buying team are **creative velocity** (you burn through angles and assets faster than humans can produce them) and **compliance risk** (one bad phrase and a profitable account is gone overnight). Most tools help with one. I wanted the tool that does the daily grind *and* has the account-safety instinct baked into every output — because a buyer shouldn't have to choose between "persuasive" and "won't get me banned."
 
